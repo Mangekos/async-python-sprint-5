@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  pg:
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: practicum
+    ports:
+      - 5432
+  backend:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - pg
