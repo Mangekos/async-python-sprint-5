@@ -8,10 +8,22 @@ services:
       POSTGRES_DB: practicum
     ports:
       - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   backend:
     build:
       context: .
     ports:
       - 8000:8000
     depends_on:
-      - pg
+      pg:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
